@@ -38,3 +38,6 @@ Thumbs.db
 
 # node modules, you'll install these files running $ npm install
 node_modules/*
+
+#config file (so we dont give away passwords)
+config.js

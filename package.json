@@ -1,0 +1,32 @@
+{
+  "name": "vcabackend",
+  "version": "0.0.1",
+  "description": "Backend for the Volunteers Center App OpenSource Project",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gillchristian/VolunteerCenterBackEnd.git"
+  },
+  "keywords": [
+    "backend",
+    "nodejs",
+    "api",
+    "opensource",
+    "volunteers",
+    "center"
+  ],
+  "author": "gillchristian",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/gillchristian/VolunteerCenterBackEnd/issues"
+  },
+  "homepage": "https://github.com/gillchristian/VolunteerCenterBackEnd",
+  "dependencies": {
+    "body-parser": "^1.13.3",
+    "express": "^4.13.3",
+    "mongoose": "^4.1.3"
+  }
+}
