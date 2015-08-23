@@ -8,7 +8,7 @@ var express 	= require('express');
 var app			= express(),
 	bodyParser 	= require('body-parser'),
 	mongoose	= require('mongoose'),
-	config		= require('./config');
+	config		= require('./config.js');
 
 
 // conect to the database
