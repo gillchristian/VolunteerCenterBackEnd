@@ -41,3 +41,21 @@ node_modules/*
 
 #config file (so we dont give away passwords)
 config.js
+
+#nodejs related files
+
+lib-cov
+*.seed
+*.log
+*.csv
+*.dat
+*.out
+*.pid
+*.gz
+
+pids
+logs
+results
+
+node_modules
+npm-debug.log

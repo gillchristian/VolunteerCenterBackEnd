@@ -31,6 +31,7 @@ var router = express.Router();
 router.use(function(req, res, next){
 
 	console.log(req.method, req.url);
+	console.log('------------------------');
 	// continue what we are doing
 	next();
 });
@@ -71,6 +72,7 @@ router.route('/users')
 			if(err) throw err;
 
 			console.log('User saved!');
+			console.log('------------------------');
 		});
 
 	});
@@ -80,7 +82,7 @@ router.route('/users/:_id')
 	
 	.get(function(req, res){
 
-		User.findById(req.param._id, function(err, user){
+		User.findById(req.params._id, function(err, user){
 			if (err) throw err;
 
 			console.log(user);
@@ -91,28 +93,34 @@ router.route('/users/:_id')
 
 	.put(function(req, res){
 
-		User.findById(req.param._id, function(err, user){
+		User.findById(req.params._id, function(err, user){
 			
 			if (err) throw err;
 
-			if (req.body.name) user.name = req.body.name;
-			if (req.body.lastname) user.lastname = req.body.lastname;
-			if (req.body.phone) user.phone = req.body.phone;
-			if (req.body.email) user.email = req.body.email;
+			if (req.body.name) 		user.name = req.body.name;
+			if (req.body.lastname) 	user.lastname = req.body.lastname;
+			if (req.body.phone) 	user.phone = req.body.phone;
+			if (req.body.email) 	user.email = req.body.email;
 
 			user.save(function(err){
 				if (err) throw err;
 
 				res.send('User Updated!!!');
 				console.log('User Updated!!!');
+				console.log('------------------------');
 			});
 		});
 	})
 
 	.delete(function(req, res){
-		User.remove({_id: req.param._id }, function(err, user){
+
+		console.log(req.method);
+
+		User.remove({_id: req.params._id }, function(err, user){
 			if (err) throw err;
 			res.send('Successfully deleted');
+			console.log('Successfully deleted');
+			console.log('------------------------');
 		});
 	});
 
