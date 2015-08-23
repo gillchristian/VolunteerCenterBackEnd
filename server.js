@@ -125,7 +125,7 @@ router.route('/users/:_id')
 	});
 
 // applay the routes to our app
-app.use('/api', router);
+app.use('/', router);
 
 // =========================================================================
 // ===== Start the server ==================================================
