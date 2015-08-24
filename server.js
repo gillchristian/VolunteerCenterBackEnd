@@ -7,12 +7,17 @@
 var express 	= require('express');
 var app			= express(),
 	bodyParser 	= require('body-parser'),
-	mongoose	= require('mongoose'),
-	config		= require('./config.js');
+	mongoose	= require('mongoose');
 
+// port 
+
+var port = process.env.PORT || 8080;
 
 // conect to the database
-mongoose.connect(config.database);
+
+var database = process.env.database;
+
+mongoose.connect(database);
 
 app.use( bodyParser.json() ); // support json encode bodies
 app.use( bodyParser.urlencoded({extend: true}) ); // support encoded bodies
@@ -130,6 +135,6 @@ app.use('/', router);
 // =========================================================================
 // ===== Start the server ==================================================
 // =========================================================================
+app.listen(port);
 
-app.listen(config.port);
-console.log('Magic happens on port' + config.port);
+console.log('Magic happens on port' + port);
