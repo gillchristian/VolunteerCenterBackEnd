@@ -139,5 +139,5 @@ app.use('/', router);
 // ===== Start the server ==================================================
 // =========================================================================
 
-app.listen(config.port);
+app.listen(port);
 console.log('Magic happens on port' + port);
