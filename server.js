@@ -9,16 +9,20 @@ var app			= express(),
 	bodyParser 	= require('body-parser'),
 	mongoose	= require('mongoose');
 
+var config 		= require('./config');
+
 app.use(bodyParser.json()); // support json encode bodies
 app.use(bodyParser.urlencoded({extend: true})); // support encoded bodies
 
 // port 
 
-var port = process.env.PORT || 8080;
+//var port = process.env.PORT || 8080;
+var port = config.port;
 
 // conect to the database
 
-var database = process.env.database;
+//var database = process.env.database;
+var database = config.database;
 
 mongoose.connect(database);
 
@@ -39,7 +43,6 @@ var router = express.Router();
 router.use(function(req, res, next){
 
 	console.log(req.method, req.url);
-	console.log('------------------------');
 	// continue what we are doing
 	next();
 });
@@ -54,19 +57,20 @@ router.get('/', function(req, res){
 // routes --- localhost:8080/users
 router.route('/users')
 
+	// get all the users
 	.get(function(req, res){
 		
 		// find all \o/ the users
 		User.find({}, function(err, users){
 			
 			if (err) throw err;
-			console.log(users);
-			console.log('------------------------');
+			console.log(users.length + 'users retrived');
 			// send the users 
 			res.json(users);
 		});
 	})
 
+	// add a single user
 	.post(function(req, res){
 
 		var user 	= new User();
@@ -79,8 +83,8 @@ router.route('/users')
 		user.save(function(err){
 			if(err) throw err;
 
+			res.send('User Created!!!');
 			console.log('User saved!');
-			console.log('------------------------');
 		});
 
 	});
@@ -88,17 +92,18 @@ router.route('/users')
 // routes --- localhost:8080/users/:user_id
 router.route('/users/:_id')
 	
+	// get an user by its id
 	.get(function(req, res){
 
 		User.findById(req.params._id, function(err, user){
 			if (err) throw err;
 
 			console.log(user);
-			console.log('------------------------');
 			res.json(user);
 		});
 	})
 
+	// update an user
 	.put(function(req, res){
 
 		User.findById(req.params._id, function(err, user){
@@ -115,20 +120,20 @@ router.route('/users/:_id')
 
 				res.send('User Updated!!!');
 				console.log('User Updated!!!');
-				console.log('------------------------');
 			});
 		});
 	})
 
+	// remove a user
 	.delete(function(req, res){
 
 		console.log(req.method);
 
 		User.remove({_id: req.params._id }, function(err, user){
 			if (err) throw err;
+			
 			res.send('Successfully deleted');
 			console.log('Successfully deleted');
-			console.log('------------------------');
 		});
 	});
 
@@ -139,5 +144,5 @@ app.use('/', router);
 // ===== Start the server ==================================================
 // =========================================================================
 
-app.listen(config.port);
+app.listen(port);
 console.log('Magic happens on port' + port);
