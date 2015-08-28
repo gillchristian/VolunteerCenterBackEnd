@@ -40,7 +40,7 @@ Thumbs.db
 node_modules/*
 
 #config file (so we dont give away passwords)
-config.js
+app/config.js
 
 #nodejs related files
 

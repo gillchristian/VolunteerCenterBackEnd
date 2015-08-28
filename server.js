@@ -1,147 +1,74 @@
 // server.js
 
+// Basic Setup =============================================================
 // =========================================================================
-// ===== Basic Setup =======================================================
-// =========================================================================
-
 var express 	= require('express');
+
 var app			= express(),
 	bodyParser 	= require('body-parser'),
+	morgan		= require('morgan'),
 	mongoose	= require('mongoose');
 
-var config 		= require('./config');
+var config 		= require('./app/config'); // leave comented when going live to hereoku
 
-app.use(bodyParser.json()); // support json encode bodies
+// App configuration =======================================================
+// =========================================================================
+
 app.use(bodyParser.urlencoded({extend: true})); // support encoded bodies
+app.use(bodyParser.json()); // support json encode bodies
 
-// port 
+// configure our app to handle CORS requests
+app.use(function(req, res, next) {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST');
+  res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type, \
+Authorization');
+  next();
+});
 
-//var port = process.env.PORT || 8080;
+// log requests to the console ---------------------------------------------
+app.use(morgan('dev'));
+
+// port --------------------------------------------------------------------
+//var port = process.env.PORT || 8080; // when conection in heroku
 var port = config.port;
 
-// conect to the database
-
+// conect to the database --------------------------------------------------
 //var database = process.env.database;
 var database = config.database;
-
 mongoose.connect(database);
 
 app.use( bodyParser.json() ); // support json encode bodies
 app.use( bodyParser.urlencoded({extend: true}) ); // support encoded bodies
 
-var User = require('./models/user.js');
-
+// Routes ==================================================================
 // =========================================================================
-// ===== Routes ============================================================
-// =========================================================================
-
-// get an instance of the Express Router
-
-var router = express.Router();
 
 // middleware that happens on every request ---- log requests
-router.use(function(req, res, next){
+app.use(function(req, res, next){
 
-	console.log(req.method, req.url);
+	console.log('im the annoying middleware! in the future i will help \\o/');
 	// continue what we are doing
 	next();
 });
 
-// basic api route :)
-
-router.get('/', function(req, res){
+// basic api route :) ------------------------------------------------------
+app.get('/', function(req, res){
 	res.send('Welcome to the Volunteers Center API :)');
 });
 
+// API ROUTES --------------------------------------------------------------
+var apiRoutes = require('./app/routes/api')(app, express);
+app.use('/api', apiRoutes);
 
-// routes --- localhost:8080/users
-router.route('/users')
+// MAIN CATCHALL ROUTE -----------------------------------------------------
+// SENDS USERS TO THE FRONT END 
+// hast to ve registered after OTHER ROUTES
+app.get('*', function(req, res){
+	res.sendFIle(path.join(__dirname + 'public/index.html'));
+});
 
-	// get all the users
-	.get(function(req, res){
-		
-		// find all \o/ the users
-		User.find({}, function(err, users){
-			
-			if (err) throw err;
-			console.log(users.length + 'users retrived');
-			// send the users 
-			res.json(users);
-		});
-	})
-
-	// add a single user
-	.post(function(req, res){
-
-		var user 	= new User();
-
-		user.name 		= req.body.name,
-		user.lastname 	= req.body.lastname,
-		user.email 		= req.body.email,
-		user.phone 		= req.body.phone,
-
-		user.save(function(err){
-			if(err) throw err;
-
-			res.send('User Created!!!');
-			console.log('User saved!');
-		});
-
-	});
-
-// routes --- localhost:8080/users/:user_id
-router.route('/users/:_id')
-	
-	// get an user by its id
-	.get(function(req, res){
-
-		User.findById(req.params._id, function(err, user){
-			if (err) throw err;
-
-			console.log(user);
-			res.json(user);
-		});
-	})
-
-	// update an user
-	.put(function(req, res){
-
-		User.findById(req.params._id, function(err, user){
-			
-			if (err) throw err;
-
-			if (req.body.name) 		user.name = req.body.name;
-			if (req.body.lastname) 	user.lastname = req.body.lastname;
-			if (req.body.phone) 	user.phone = req.body.phone;
-			if (req.body.email) 	user.email = req.body.email;
-
-			user.save(function(err){
-				if (err) throw err;
-
-				res.send('User Updated!!!');
-				console.log('User Updated!!!');
-			});
-		});
-	})
-
-	// remove a user
-	.delete(function(req, res){
-
-		console.log(req.method);
-
-		User.remove({_id: req.params._id }, function(err, user){
-			if (err) throw err;
-			
-			res.send('Successfully deleted');
-			console.log('Successfully deleted');
-		});
-	});
-
-// applay the routes to our app
-app.use('/', router);
-
-// =========================================================================
-// ===== Start the server ==================================================
+// Start the server ========================================================
 // =========================================================================
 
 app.listen(port);
