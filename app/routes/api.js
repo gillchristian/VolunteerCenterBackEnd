@@ -111,7 +111,7 @@ module.exports = function(app, express){
 			var place 	= new Place();
 
 			place.name 			= req.body.name,
-			place.addres 		= req.body.addres,
+			place.address 		= req.body.address,
 			place.coordinator 	= req.body.coordinator,
 			place.phone 		= req.body.phone,
 
@@ -145,7 +145,7 @@ module.exports = function(app, express){
 				if (err) throw err;
 
 				if (req.body.name) 			place.name = req.body.name;
-				if (req.body.addres) 		place.addres = req.body.addres;
+				if (req.body.address) 		place.address = req.body.address;
 				if (req.body.phone) 		place.phone = req.body.phone;
 				if (req.body.coordinator) 	place.coordinator = req.body.coordinator;
 
