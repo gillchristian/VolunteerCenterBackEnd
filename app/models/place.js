@@ -5,7 +5,7 @@ var Schema = mongoose.Schema;
 // create a schema
 var placeSchema = new Schema({
   name: String,
-  addres: String,
+  address: String,
   phone: String,
   coordinator: String
 });
